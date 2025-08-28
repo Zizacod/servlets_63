@@ -19,6 +19,18 @@ public class Car {
     public Car() {
     }
 
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     public String getBrand() {
         return brand;
     }
