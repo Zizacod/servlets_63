@@ -3,6 +3,7 @@ package app.repository;
 import app.constants.Constants;
 import app.model.Car;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -85,10 +86,27 @@ public class CarRepositoryDB implements CarRepository {
     public Car getById(long id) {
         try (Connection connection = getConnection()) {
 
+            String query = String.format("SELECT * from car where id=%d;", id);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(query);
+
+            if (resultSet.next()) {
+                // есть строка с авто в result-set
+                String brand = resultSet.getString("brand");
+                BigDecimal price = resultSet.getBigDecimal("price");
+                int year = resultSet.getInt("year");
+
+                return new Car(id, brand, price, year);
+            }
+
+            // ответ пустой - автомобиль не найден
+            return null;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     @Override
@@ -102,12 +120,15 @@ public class CarRepositoryDB implements CarRepository {
     }
 
     @Override
-    public boolean delete(long id) {
+    public Car delete(long id) {
+
+        // DELETE FROM WHERE
+
         try (Connection connection = getConnection()) {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return false;
+        return null;
     }
 }

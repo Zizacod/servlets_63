@@ -7,7 +7,7 @@ import org.hibernate.cfg.Configuration;
 
 import java.util.List;
 
-public class CarRepositoryHibernate implements CarRepository{
+public class CarRepositoryHibernate implements CarRepository {
 
 
     private EntityManager entityManager;
@@ -25,7 +25,7 @@ public class CarRepositoryHibernate implements CarRepository{
     @Override
     public Car save(Car car) {
 
-       EntityTransaction transaction = entityManager.getTransaction();
+        EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
@@ -49,12 +49,40 @@ public class CarRepositoryHibernate implements CarRepository{
     }
 
     @Override
-    public Car update(Car car) throws IllegalArgumentException {
-        return null;
+    public Car update(Car dataForUpdate) throws IllegalArgumentException {
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            Car foundCar = entityManager.find(Car.class, dataForUpdate.getId());
+            foundCar.setPrice(dataForUpdate.getPrice());
+            transaction.commit();
+            return foundCar;
+
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw new RuntimeException();
+        }
     }
 
     @Override
-    public boolean delete(long id) {
-        return false;
+    public Car delete(long id) {
+
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            Car foundCar = entityManager.find(Car.class, id);
+            entityManager.remove(foundCar);
+            transaction.commit();
+            return foundCar;
+            // remove(foundCat)
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw new RuntimeException(e);
+        }
+
+
     }
+
 }
