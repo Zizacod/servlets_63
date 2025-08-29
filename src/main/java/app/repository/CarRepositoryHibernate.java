@@ -55,6 +55,9 @@ public class CarRepositoryHibernate implements CarRepository {
         try {
             transaction.begin();
             Car foundCar = entityManager.find(Car.class, dataForUpdate.getId());
+            if (foundCar == null) {
+                throw new IllegalArgumentException();
+            }
             foundCar.setPrice(dataForUpdate.getPrice());
             transaction.commit();
             return foundCar;
