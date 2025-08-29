@@ -51,14 +51,14 @@ public class CarRepositoryMap implements CarRepository {
         return car;
     }
     
-    @Override
-    public boolean delete(long id) {
+   /* @Override
+    public Car delete(long id) {
         if (database.containsKey(id)) {
             database.remove(id);
             return true;
         }
         return false;
-    }
+    }*/
 }
 
 
