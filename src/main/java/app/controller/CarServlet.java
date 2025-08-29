@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class CarServlet extends HttpServlet {
 
-    private CarRepository repository = new CarRepositoryHibernate();
+    private CarRepository repository = new CarRepositoryDB();
 
     private ObjectMapper mapper = new ObjectMapper();
 

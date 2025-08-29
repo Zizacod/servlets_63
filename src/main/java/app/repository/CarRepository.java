@@ -15,4 +15,5 @@ public interface CarRepository {
     Car update(Car car) throws IllegalArgumentException;
     
     Car delete(long id);
+
 }
