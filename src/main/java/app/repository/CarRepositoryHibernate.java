@@ -3,6 +3,7 @@ package app.repository;
 import app.model.Car;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import org.hibernate.cfg.Configuration;
 
 import java.util.List;
@@ -17,10 +18,19 @@ public class CarRepositoryHibernate implements CarRepository {
                 .buildSessionFactory().createEntityManager();
     }
 
-    @Override
+    /*@Override
     public List<Car> getAll() {
         return entityManager.createQuery("from Car", Car.class).getResultList();
+    }*/
+
+    //Типобезопасный тип TypedQuery
+    @Override
+    public List<Car> getAll() {
+        TypedQuery<Car> query = entityManager.createQuery("SELECT c FROM Car c", Car.class);
+        return query.getResultList();
     }
+
+
 
     @Override
     public Car save(Car car) {
@@ -68,6 +78,8 @@ public class CarRepositoryHibernate implements CarRepository {
         }
     }
 
+
+
     @Override
     public Car delete(long id) {
 
@@ -76,6 +88,9 @@ public class CarRepositoryHibernate implements CarRepository {
         try {
             transaction.begin();
             Car foundCar = entityManager.find(Car.class, id);
+            if (foundCar == null) {
+                throw new IllegalArgumentException("Car not found: " + id);
+            }
             entityManager.remove(foundCar);
             transaction.commit();
             return foundCar;
