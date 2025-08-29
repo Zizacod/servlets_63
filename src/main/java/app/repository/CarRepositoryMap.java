@@ -59,6 +59,11 @@ public class CarRepositoryMap implements CarRepository {
         }
         return false;
     }*/
+
+    @Override
+    public Car delete(long id) {
+        return database.remove(id);
+    }
 }
 
 
